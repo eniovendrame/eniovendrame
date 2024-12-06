@@ -1,12 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Enio Vendrame</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enio Vendrame</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            color: #green;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+        h1 {
+            position: relative;
+            z-index: 1;  /* Make sure the text is above the characters */
+            color: white;
+            margin-top: 20px;
+        }
+        p {
+            position: relative;
+            z-index: 1;  /* Make sure the text is above the characters */
+            color: white;
+        }
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind the text */
+        }
+    </style>
 </head>
 <body>
 
-<h3>Under construction</h3>
-<p>Email: enio(dot)contact(at)gmail(dot)com</p>
+<h1>Welcome</h1>
+<p>enio(dot)contact(at)gmail(dot)com</p>
+
+<canvas id="canvas"></canvas>
+
+<script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    
+    var characters = 'ENIOVENDRAME'; // Characters to be displayed
+    characters = characters.split('');
+
+    var fontSize = 10;
+    var columns = canvas.width / fontSize; // Number of columns for the rain
+    var drops = []; // Array of drops - one for each column
+
+    for (var x = 0; x < columns; x++) {
+        drops[x] = 1; // Initial y position of the drops
+    }
+
+    function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Translucent black background
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#0F0'; // Green text color
+        ctx.font = fontSize + 'px monospace';
+
+        for (var i = 0; i < drops.length; i++) {
+            var text = characters[Math.floor(Math.random() * characters.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize); // Draw the character
+
+            // Reset drop to the top randomly
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+
+            drops[i]++; // Increment Y position for the drop
+        }
+    }
+
+    setInterval(draw, 66); // Drawing at approximately 60 frames per second
+
+    // Resize canvas when window is resized
+    window.addEventListener('resize', function() {
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        // Reinitialize drops
+        columns = canvas.width / fontSize;
+        drops = [];
+        for (var x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+    });
+</script>
 
 </body>
 </html>
